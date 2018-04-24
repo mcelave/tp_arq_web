@@ -11,6 +11,23 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
+}); */
+
+
+Route::get('/','SalaController@buscarMensajes');
+//Route::get('/mensajes','Hello@buscarMensajes');
+
+
+
+Route::get('/hello',function(){
+    //return 'Hello martin,ezequiel,martin,cristian!';
+	return view('sala');
 });
+
+
+//Route::get('/{id}', 'SalaController@show');
+
+Route::post('/mensajes/enviar', 'SalaController@enviarMensaje');
+
