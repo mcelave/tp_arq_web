@@ -3,69 +3,72 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Events\IngresoUsuario;
+use Illuminate\Support\Facades\Event;
+
+use App\usuario;
 use DB;
 
-class SalaController extends Controller
+
+
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
+
+    private $users;
+
     public function index()
     {
-        //
+        return view('usuarios' );
     }
-
-
-    public function buscarMensajes(){
-
-        $mensajes = DB::table('mensajes')->get();
-         $usuarios = DB::table('usuarios')->get();
-        return view('sala', [ 'mensajes' => $mensajes,  'usuarios' => $usuarios   ] );
-
-    }
-
-
-public function enviarMensaje(Request $request)
-{
-
-     $contenido = $request->input('mensaje');
-    
-
-      $date = date('Y-m-d H:i:s');
-
-     $id = DB::table('mensajes')->insertGetId( [ 'contenido' => $contenido,'id_usuario' => 2, 'fecha' =>  $date]) ;
-
-     $mensajes = DB::table('mensajes')->get();
-
-   
-    return view('sala', [ 'mensajes' => $mensajes, 'mensaje' =>' '  ] );
-
-}
-
-
-
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(){
+        
+
+    }
+
+
+     public function guardar(Request $request)
     {
         //
+        $nombre  = $request->input('nombre');
+
+        $id = DB::table('usuarios')->insertGetId( [ 'nombre' => $nombre ]) ;
+
+        $usuarios = DB::table('usuarios')->get();
+        $mensajes = DB::table('mensajes')->get();
+
+        /*
+            probando los events listeners andan bien pero .. como hacer que se actualicen a los demas cients
+        $usuario = DB::table('usuarios')->where('id', $id)->first();
+    
+        $us = new usuario($usuario->nombre, $usuario->id);
+
+        $response = Event::fire( new IngresoUsuario( $us ));
+        */
+        return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' =>        $usuarios ] );
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+     * @return \Illuminate\Http\Response */
+     
     public function store(Request $request)
     {
-        //
+      
     }
 
     /**

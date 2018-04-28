@@ -16,7 +16,10 @@
 }); */
 
 
-Route::get('/','SalaController@buscarMensajes');
+
+Route::get('/','UserController@index');
+
+Route::get('/sala','SalaController@buscarMensajes');
 //Route::get('/mensajes','Hello@buscarMensajes');
 
 
@@ -30,4 +33,7 @@ Route::get('/hello',function(){
 //Route::get('/{id}', 'SalaController@show');
 
 Route::post('/mensajes/enviar', 'SalaController@enviarMensaje');
+
+Route::post('/usuario/store', 'UserController@guardar');
+
 

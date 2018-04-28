@@ -18,6 +18,7 @@
                 margin: 0 auto;
                 max-width: 800px;
                 padding: 0 20px;
+
             }
 
          .container {
@@ -26,18 +27,18 @@
             border-radius: 10px;
             padding: 10px;
             margin: 10px 0;
-
             border-color: #ccc;
             background-color: #ddd;
          }
 
-         .container::after {
+
+         .container::mensaje {
             content: "";
             clear: both;
             display: table;
         }
 
-        .time-left {
+         .time-left {
             float: left;
             color: #999;
         }
@@ -47,12 +48,35 @@
             color: #aaa;
         }
 
+         .column{
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+        }
+
+        .usuarios{
+            float: right;
+            width: 50%;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+        }
+
+       
+
+      .row:after {
+          content: "";
+          display: table;
+          clear: both;
+      } 
+
         
       </style>
     </head>
-<body>
+<body style="background-color:#FAFAD2;">
     
-  
+ <div class="row">
+
    <?php
          echo Form::open(array('url' => 'mensajes/enviar'));
             echo Form::text('mensaje','');
@@ -61,8 +85,13 @@
          echo Form::close();
       ?>
 
+  </div>
 
- 
+  <div class="row">
+    <div class="column"  style="overflow-y:scroll;">
+      
+
+
       <?php foreach ($mensajes as $mensaje) { 
 
         
@@ -70,7 +99,7 @@
             $nombre = $mensaje->id_usuario;
             $fecha = $mensaje->fecha;
             ?>
-            <div class="container">
+            <div class="container mensaje">
                 
                  <p> <?php { echo $contenido;  } ?> </p>
                  <span class="time-left"><?php { echo $fecha;  } ?></span>
@@ -80,22 +109,30 @@
             }   
 
             ?>
-           
-
-    
+    </div>
 
            
+  <div class="column"  style="overflow-y:scroll;">
 
-          
- 
-     
-    
+  <h2> Presentes en la sala </h2>
+      <?php foreach ($usuarios as $usuario) { 
+
+        
+            $nombreUsuario = $usuario->nombre; 
+            ?>
+            <div class="usuario">
+                
+                 <p> <?php { echo $nombreUsuario;  } ?> </p>
+              </div>       
+           <?php   
+            
+            }   
+
+            ?>
+   </div>
 
 
-
-
-
-
+</div>
 
     </body>
 </html>
