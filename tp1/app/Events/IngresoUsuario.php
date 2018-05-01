@@ -11,7 +11,8 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use App\usuario;
 
-class IngresoUsuario
+class IngresoUsuario implements ShouldBroadcast
+
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,22 +22,45 @@ class IngresoUsuario
      * @return void
      */
 
-    public $usuario; // publico para pasarla a los listeners
+    protected $usuario; // publico para pasarla a los listeners
+    //public $text;
 
-
-    public function __construct(usuario $usuario){
+   public function __construct(usuario $usuario){
         
         $this->usuario = $usuario;
     }
+    /*public function __construct( $text){
+        
+        $this->text = $text;
+    }*/
 
     /**
      * Get the channels the event should broadcast on.
      *
      * @return \Illuminate\Broadcasting\Channel|array
      */
+    /*public function broadcastOn()
+    {
+       // return new PrivateChannel('channel-name');
+        return ['test-channel'];
+    } */
+
+
+    public function broadcastWith()
+    {
+        // This must always be an array. Since it will be parsed with json_encode()
+        return [
+            'usuario' => $this->usuario->nombre
+        ];
+    }
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('chatroom');
+    }
+
+      public function broadcastAs()
+    {
+        return 'IngresoUsuario';
     }
 
 

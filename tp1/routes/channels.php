@@ -14,3 +14,17 @@
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+
+/*Broadcast::channel('chatroom', function ($user) {
+    return $user;
+}); */
+
+/*Broadcast::channel('chatroom', function () {
+    return true;
+}); */
+
+
+Broadcast::channel('notify', function () {
+    return true;
+}); 

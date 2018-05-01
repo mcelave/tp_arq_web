@@ -10,7 +10,10 @@
         "illuminate/html": "^5.0",
         "laravel/framework": "5.6.*",
         "laravel/tinker": "^1.0",
-        "laravelcollective/html": "^5.2.0"
+        "laravelcollective/html": "^5.2.0",
+        "pusher/pusher-http-laravel": "^4.1",
+        "pusher/pusher-php-server": "~3.0",
+        "vinkla/pusher": "^4.1"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

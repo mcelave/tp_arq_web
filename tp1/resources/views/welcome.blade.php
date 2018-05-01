@@ -1,4 +1,5 @@
 <!doctype html>
+<!doctype html>
 <html lang="{{ app()->getLocale() }}">
     <head>
         <meta charset="utf-8">
@@ -65,6 +66,28 @@
         </style>
     </head>
     <body>
+
+    <script src="https://js.pusher.com/4.2/pusher.min.js"></script>
+
+    <script>
+    //Remember to replace key and cluster with your credentials.
+
+   /*  Pusher.logToConsole = true;
+    var pusher = new Pusher('9565156bc0be46907d1c', {
+      cluster: 'us2',
+      encrypted: true
+    });
+ 
+    //Also remember to change channel and event name if your's are different.
+    var channel = pusher.subscribe('notify');
+      channel.bind('pusher:subscription_succeeded', function(members) {
+    alert('successfully subscribed!');
+    });
+    channel.bind('notify-event', function(message) {
+        alert(message);
+    });*/
+ 
+    </script>
         <div class="flex-center position-ref full-height">
             @if (Route::has('login'))
                 <div class="top-right links">

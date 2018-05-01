@@ -74,7 +74,45 @@
       </style>
     </head>
 <body style="background-color:#FAFAD2;">
-    
+    <script src="https://js.pusher.com/4.2/pusher.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script>
+    //Remember to replace key and cluster with your credentials.
+     Pusher.logToConsole = true;
+    var pusher = new Pusher('9565156bc0be46907d1c', {
+      cluster: 'us2',
+      encrypted: true
+    });
+ 
+    //Also remember to change channel and event name if your's are different.
+    var channel = pusher.subscribe('notify');
+
+     /* channel.bind('pusher:subscription_succeeded', function(members) {
+    alert('successfully subscribed!');
+    });*/
+
+    channel.bind('notify-event', function(nombre) {
+      // location.reload();
+      /*$.ajax({url: "http://localhost:8000/cargarParticipantes", success: function(result){
+           debugger;
+           var lista =  $("#listausuarios");
+           var copiares = result;
+           $("#listausuarios").append(" <div ><p> shelton </p> </div> ");
+
+           alert(result);
+        
+
+
+        }});  */  
+      $("#listausuarios").append(" <div ><p>" + nombre + "</p> </div> ");
+        alert(nombre);
+    });
+
+  
+ 
+    </script> 
+
  <div class="row">
 
    <?php
@@ -88,11 +126,10 @@
   </div>
 
   <div class="row">
-    <div class="column"  style="overflow-y:scroll;">
-      
+    <div  class="column"  style="overflow-y:scroll;">
+         
 
-
-      <?php foreach ($mensajes as $mensaje) { 
+          <?php foreach ($mensajes as $mensaje) { 
 
         
             $contenido = $mensaje->contenido; 
@@ -109,10 +146,13 @@
             }   
 
             ?>
-    </div>
+
+
+    </div> 
+
 
            
-  <div class="column"  style="overflow-y:scroll;">
+  <div id= "listausuarios" class="column"  style="overflow-y:scroll;">
 
   <h2> Presentes en la sala </h2>
       <?php foreach ($usuarios as $usuario) { 
