@@ -62,8 +62,6 @@
             height: 300px; /* Should be removed. Only for demonstration */
         }
 
-       
-
       .row:after {
           content: "";
           display: table;
@@ -93,24 +91,27 @@
     });*/
 
     channel.bind('notify-event', function(nombre) {
-      // location.reload();
-      /*$.ajax({url: "http://localhost:8000/cargarParticipantes", success: function(result){
-           debugger;
-           var lista =  $("#listausuarios");
-           var copiares = result;
-           $("#listausuarios").append(" <div ><p> shelton </p> </div> ");
+     
+      // aca como me suscribi al evento, el handler lo toma y agrega a la lista de usuarios con el nombre pasado por parametro
 
-           alert(result);
-        
-
-
-        }});  */  
       $("#listausuarios").append(" <div ><p>" + nombre + "</p> </div> ");
         alert(nombre);
     });
 
-  
- 
+
+ channel.bind('notify-mensaje', function(contenido) {
+    
+      var fecha = new Date();
+
+      $("#listamensajes").append('<div class="container mensaje">' +
+           "<p>" + contenido + "</p>" +
+           '<span class="time-left">' + fecha + '</span>' +
+           '</div>');
+
+        alert(contenido);
+        alert(fecha);
+    });
+
     </script> 
 
  <div class="row">
@@ -126,7 +127,7 @@
   </div>
 
   <div class="row">
-    <div  class="column"  style="overflow-y:scroll;">
+    <div id="listamensajes" class="column"  style="overflow-y:scroll;">
          
 
           <?php foreach ($mensajes as $mensaje) { 
@@ -146,12 +147,8 @@
             }   
 
             ?>
-
-
     </div> 
 
-
-           
   <div id= "listausuarios" class="column"  style="overflow-y:scroll;">
 
   <h2> Presentes en la sala </h2>

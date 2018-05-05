@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\App;
 
+use App\usuario;
+
 use DB;
 
 class SalaController extends Controller
@@ -39,18 +41,13 @@ class SalaController extends Controller
        // $pusher = App::make('pusher');
 
         $message= "Hello User";
-        
-        //Send a message to notify channel with an event name of notify-event
-        //$pusher->trigger('notify', 'notify-event', $message);  
-
-
+    
         return view('sala', [ 'mensajes' => $mensajes,  'usuarios' => $usuarios   ] );
 
     }
 
 
-public function enviarMensaje(Request $request)
-{
+public function enviarMensaje(Request $request){
 
      $contenido = $request->input('mensaje');
     
@@ -60,9 +57,16 @@ public function enviarMensaje(Request $request)
      $id = DB::table('mensajes')->insertGetId( [ 'contenido' => $contenido,'id_usuario' => 2, 'fecha' =>  $date]) ;
 
      $mensajes = DB::table('mensajes')->get();
+     $usuarios = DB::table('usuarios')->get();
 
-   
-    return view('sala', [ 'mensajes' => $mensajes, 'mensaje' =>' '  ] );
+
+    $pusher = App::make('pusher');
+
+
+    //primer parametro nombre del channel, segundo el nombre del evento
+    $pusher->trigger('notify', 'notify-mensaje', $contenido); 
+
+    return view('sala', [ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' => $usuarios   ] );
 
 }
 

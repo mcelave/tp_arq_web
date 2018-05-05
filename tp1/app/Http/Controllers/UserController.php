@@ -72,14 +72,12 @@ class UserController extends Controller
          $pusher = App::make('pusher');
 
 
-        //primer parametro nombre del channel, segundo el nombre del evento
+        /* Aca hago que el  la accion notify, y le atachedo el notidy event pasando como parametro el el nombre del usuario. Del lado del cliente esto puede verse, en la vista en sala.blade.php  var channel = pusher.subscribe('notify') con su handler. Es parecido al codigo de abajo pero, con pusher todos los clientes se enteran, es decir si tenes otras ventanas abiertas en la lista de usuarios presentes les va va aparecerl porque el handler lo agrega.                 
+        */
         $pusher->trigger('notify', 'notify-event', $usuario->nombre); 
 
 
-
-
-        /*
-            probando los events listeners andan bien pero .. como hacer que se actualicen a los demas cients
+        /* esta parte de codigo dispara un evento pero no a todos los clientes como si lo hace pusher
         $usuario = DB::table('usuarios')->where('id', $id)->first();
     
         $us = new usuario($usuario->nombre, $usuario->id);
@@ -93,12 +91,7 @@ class UserController extends Controller
  public function buscarUsuarios(Request $request)
     {
 
-        $usuarios = DB::table('usuarios')->get();
-        //echo 'buscando usuarios';
-        
-        //return 'hola';
-        //return $usuarios;
-       
+        $usuarios = DB::table('usuarios')->get();  
     }
 
 

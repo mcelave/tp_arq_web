@@ -46,42 +46,7 @@ Route::get('/bridge', function() {
     return view('welcome');
 });
 
-
-
-/*Route::post('/usuario/store', function () {
-
-    
-
-        
-            probando los events listeners andan bien pero .. como hacer que se actualicen a los demas cients
-        $usuario = DB::table('usuarios')->where('id', $id)->first();
-    
-        $us = new usuario($usuario->nombre, $usuario->id);
-
-        $response = Event::fire( new IngresoUsuario( $us ));
-        
-        echo 'asdasdssss';
-
-        $us = new usuario('eluser', 1000);
-
-      //  return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' =>        $usuarios ] );
-
-        $mensajes =  array();
-      
-     
-        $usuarios = array();
-        array_push($usuarios,$us);
-   		 broadcast(new IngresoUsuario($us))->toOthers();
-
-   		 return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' =>        $usuarios ] );
-
-    //return ['status' => 'OK'];
-});*/
-
-
-//Route::get('/{id}', 'SalaController@show');
-
-//Route::post('/mensajes/enviar', 'SalaController@enviarMensaje');
+Route::post('/mensajes/enviar', 'SalaController@enviarMensaje');
 
 Route::post('/usuario/store', 'UserController@guardar');
 
