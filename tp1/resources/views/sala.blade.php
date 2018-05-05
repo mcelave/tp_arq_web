@@ -95,7 +95,7 @@
       // aca como me suscribi al evento, el handler lo toma y agrega a la lista de usuarios con el nombre pasado por parametro
 
       $("#listausuarios").append(" <div ><p>" + nombre + "</p> </div> ");
-        alert(nombre);
+       
     });
 
 
@@ -108,8 +108,8 @@
            '<span class="time-left">' + fecha + '</span>' +
            '</div>');
 
-        alert(contenido);
-        alert(fecha);
+       // alert(contenido);
+       // alert(fecha);
     });
 
     </script> 
