@@ -16,7 +16,7 @@
 }); */
 
 use Illuminate\Support\Facades\App;
-use App\usuario;
+use App\Models\Usuario;
 use App\Events\IngresoUsuario;
 
 

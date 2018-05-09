@@ -29,8 +29,5 @@ class InformarUsuarioSala
         //
         $usuario = $event->getUsuario();
         echo $usuario;
-
-
-
     }
 }

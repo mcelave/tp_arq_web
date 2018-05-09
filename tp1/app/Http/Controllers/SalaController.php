@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\App;
 
-use App\usuario;
+use App\Models\Usuario;
 
 use DB;
 
@@ -48,31 +48,24 @@ class SalaController extends Controller
 
 
 public function enviarMensaje(Request $request){
+    $contenido = $request->input('mensaje');
 
-     $contenido = $request->input('mensaje');
-    
 
-      $date = date('Y-m-d H:i:s');
+    $date = date('Y-m-d H:i:s');
 
-     $id = DB::table('mensajes')->insertGetId( [ 'contenido' => $contenido,'id_usuario' => 2, 'fecha' =>  $date]) ;
+    $id = DB::table('mensajes')->insertGetId( [ 'contenido' => $contenido,'id_usuario' => 2, 'fecha' => $date]) ;
 
-     $mensajes = DB::table('mensajes')->get();
-     $usuarios = DB::table('usuarios')->get();
-
+    $mensajes = DB::table('mensajes')->get();
+    $usuarios = DB::table('usuarios')->get();
 
     $pusher = App::make('pusher');
 
 
     //primer parametro nombre del channel, segundo el nombre del evento
-    $pusher->trigger('notify', 'notify-mensaje', $contenido); 
+    $pusher->trigger('notify', 'notify-mensaje-publico', $contenido);
 
-    return view('sala', [ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' => $usuarios   ] );
-
+    return view('sala', [ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' => $usuarios ] );
 }
-
-
-
-
 
     /**
      * Show the form for creating a new resource.

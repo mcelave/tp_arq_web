@@ -9,7 +9,7 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use App\usuario;
+use App\Models\Usuario;
 
 class IngresoUsuario implements ShouldBroadcast
 
@@ -25,7 +25,7 @@ class IngresoUsuario implements ShouldBroadcast
     protected $usuario; // publico para pasarla a los listeners
     //public $text;
 
-   public function __construct(usuario $usuario){
+    public function __construct(Usuario $usuario){
         
         $this->usuario = $usuario;
     }
@@ -66,6 +66,5 @@ class IngresoUsuario implements ShouldBroadcast
 
     public function getUsuario(){
         return $this->usuario->nombre;
-
     }
 }

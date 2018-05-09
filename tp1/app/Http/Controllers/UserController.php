@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\App;
 
 use Pusher\Pusher;
 
-use App\usuario;
+use App\Models\Usuario;
 use DB;
-
 
 
 class UserController extends Controller
@@ -21,7 +20,6 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-
 
     private $users;
 
@@ -54,9 +52,9 @@ class UserController extends Controller
 
         $usuario = DB::table('usuarios')->where('id', $id)->first();
     
-        $us = new usuario($usuario->nombre, $usuario->id);
+        $us = new Usuario($usuario->nombre, $usuario->id);
 
-          $options = array(
+        $options = array(
             'cluster' => 'us2', 
             'encrypted' => true
         );
@@ -84,7 +82,7 @@ class UserController extends Controller
 
         $response = Event::fire( new IngresoUsuario( $us ));
         */
-        return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' =>        $usuarios ] );
+        return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' => $usuarios ] );
 
     }
 
