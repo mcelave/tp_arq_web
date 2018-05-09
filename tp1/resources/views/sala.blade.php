@@ -98,9 +98,9 @@
         addPrivateMessage(nombreUsuario, contenido);
       });
 
-      function addUser(nombre) {
-        $("#listausuarios").append(" <div id="+ nombre + " ><p>" + nombre + "</p> </div> ");
-        bindOnClick(nombre);
+      function addUser(username) {
+        $("#listausuarios").append(" <div id="+ username + " ><p>" + username + "</p> </div> ");
+        bindOnClick(username);
       }
 
       function bindOnClick(username) {
@@ -111,13 +111,13 @@
         })
       }
 
-      function displayPrivateMessagesForUser(nombre) {
+      function displayPrivateMessagesForUser(username) {
         $("#privateChat").empty();
-        let currentMessages = messages[nombre];
+        let currentMessages = messages[username];
 
-        for (message in currentMessages) {
+        currentMessages.forEach(function(message) {
           $("#privateChat").append(divMessage(message))
-        }
+        })
       }
 
       function addPublicMessage(content) {
@@ -128,19 +128,21 @@
 
       function addPrivateMessage(fromUsername, content) {
         messages[fromUsername].push(content);
-        highlightUser(fromUsername);
         
         if (currentOpenChatUser == fromUsername) {
           $("#privateChat").append(divMessage(content))
+        } else {
+          highlightUser(fromUsername);
         }
       }
 
       function divMessage(content) {
         let fecha = new Date();
-        return '<div class="container mensaje">' +
+        let message = '<div class="container mensaje">' +
             "<p>" + content + "</p>" +
             '<span class="time-left">' + fecha + '</span>' +
-          '</div>'
+          '</div>';
+        return message;
       }
   
       function highlightUser(username) {
