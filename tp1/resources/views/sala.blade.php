@@ -73,6 +73,7 @@
     <script>
       var users = @json($usuarios);
       var messages = [];
+      var currentOpenChatUser;
 
       users.forEach(function(user) {
         messages[user.nombre] = [];
@@ -94,7 +95,7 @@
       });
 
       channel.bind('notify-mensaje-privado', function(nombreUsuario, contenido) {
-        addPrivateMessage(contenido);
+        addPrivateMessage(nombreUsuario, contenido);
       });
 
       function addUser(nombre) {
@@ -102,40 +103,57 @@
         bindOnClick(nombre);
       }
 
-      function bindOnClick(nombre) {
-        // alert(nombre);
-        $("#" + nombre).click(function(e) {
-          alert(nombre);
+      function bindOnClick(username) {
+        $(document).on('click',"#" + username, function() {
+          currentOpenChatUser = username;
+          displayPrivateMessagesForUser(username);
+          unHighlightUser(username);
         })
       }
 
-      function addPublicMessage(contenido) {
-        var fecha = new Date();
+      function displayPrivateMessagesForUser(nombre) {
+        $("#privateChat").empty();
+        let currentMessages = messages[nombre];
 
-        $("#listamensajes").append(
-          '<div class="container mensaje">' +
-            "<p>" + contenido + "</p>" +
-            '<span class="time-left">' + fecha + '</span>' +
-          '</div>');
+        for (message in currentMessages) {
+          $("#privateChat").append(divMessage(message))
+        }
       }
 
-      function addPrivateMessage(fromUsername, contenido) {
-        users[fromUsername].push(contenido);
-        highlightUser(fromUsername);
+      function addPublicMessage(content) {
+        var fecha = new Date();
 
+        $("#listamensajes").append(divMessage(content));
+      }
+
+      function addPrivateMessage(fromUsername, content) {
+        messages[fromUsername].push(content);
+        highlightUser(fromUsername);
+        
+        if (currentOpenChatUser == fromUsername) {
+          $("#privateChat").append(divMessage(content))
+        }
+      }
+
+      function divMessage(content) {
+        let fecha = new Date();
+        return '<div class="container mensaje">' +
+            "<p>" + content + "</p>" +
+            '<span class="time-left">' + fecha + '</span>' +
+          '</div>'
       }
   
       function highlightUser(username) {
-        //setear el amarillo el background-color del user que corresponda, con jquery deberiamos poder filtrar el que queremos
+        $("#" + username).css('background','#FFFF00')
       }
 
       function unHighlightUser(username) {
-        //esto se ejecutaria cuando clickeo el username para abrir el chat privado con ese
+        $("#" + username).css('background','#FAFAD2')
       }
 
       function clearPublicMessageInput() {
         //no me salio, pero queda por si llegamos a hacerlo, no es necesario igual
-        $("#publicTextInput").val("");
+        $("#publicTextInput").text("");
       }
 
     </script> 
@@ -152,7 +170,6 @@
 
       <div class="row">
         <div id="listamensajes" class="column"  style="overflow-y:scroll;">
-
             <?php foreach ($mensajes as $mensaje) { 
               $contenido = $mensaje->contenido; 
               $nombre = $mensaje->id_usuario;
@@ -186,7 +203,7 @@
          </div>
       </div>
     </div>
-    <div id="privateChat style="float:right">
+    <div id="privateChat" style="float:right; width:30%">
     </div>
   </body>
 </html>
