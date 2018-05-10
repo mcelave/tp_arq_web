@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\App;
 
 use Pusher\Pusher;
 
-use App\Models\Usuario;
+use App\Models\User;
 use DB;
 
 
@@ -25,7 +25,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return view('usuarios' );
+        return view('usuarios');
     }
 
     /**
@@ -43,22 +43,6 @@ class UserController extends Controller
     {
         //
 
-        $nombre  = $request->input('nombre');
-
-        $id = DB::table('usuarios')->insertGetId( [ 'nombre' => $nombre ]) ;
-
-        $usuarios = DB::table('usuarios')->get();
-        $mensajes = DB::table('mensajes')->get();
-
-        $usuario = DB::table('usuarios')->where('id', $id)->first();
-    
-        $us = new Usuario($usuario->nombre, $usuario->id);
-
-        $options = array(
-            'cluster' => 'us2', 
-            'encrypted' => true
-        );
- 
        //Remember to set your credentials below.
         /*$pusher = new Pusher(
             '9565156bc0be46907d1c',
@@ -102,6 +86,18 @@ class UserController extends Controller
      
     public function store(Request $request)
     {
+      /*  $request->validate(
+        ['name' => 'required|unique:users',
+            'age' => 'required',
+            'city' => 'required'],
+        ['name.required' => "El campo Apodo es obligatorio",
+            'name.unique' => "El Apodo elegido ya está en uso",
+            'age.required' => "El campo Edad es obligatorio",
+            'city.required' => "El campo Ciudad es obligatorio"]);*/
+           
+
+        $user = User::createUser($request['name'], $request['age'], $request['city']);
+        return redirect()->action('RoomController@index', ['name' => $request['name']]);
       
     }
 

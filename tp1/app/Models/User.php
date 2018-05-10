@@ -2,28 +2,30 @@
 
 namespace App\Models;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
-{
-    use Notifiable;
+class User extends Model {    
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+	
+	protected $fillable = ['name', 'age', 'city'];
 
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
+    protected $hidden = [];
+
+	public static function createUser($name,$age,$city){
+		return User::create(['name'=> $name, 'age'=> $age, 'city' => $city ]);
+	}
+
+	public static function getUserNamed($name){
+		return User::where(['name'=> $name])->first();
+	}
+
+
+	public function mensajes(){
+		return $this->hasMany(Mensaje::class);
+	}
 }

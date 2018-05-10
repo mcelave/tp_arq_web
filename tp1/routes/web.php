@@ -22,8 +22,13 @@ use App\Events\IngresoUsuario;
 
 Route::get('/','UserController@index');
 
+Route::post('/users/store', 'UserController@store');
+
+Route::get('/room', 'RoomController@index');
+
+Route::get('/trigger', 'RoomController@trigger');
+
 Route::get('/sala','SalaController@buscarMensajes');
-//Route::get('/mensajes','Hello@buscarMensajes');
 
 Route::get('/notify', 'PusherController@sendNotification');
 
@@ -48,6 +53,6 @@ Route::get('/bridge', function() {
 
 Route::post('/mensajes/enviar', 'SalaController@enviarMensaje');
 
-Route::post('/usuario/store', 'UserController@guardar');
+
 
 
