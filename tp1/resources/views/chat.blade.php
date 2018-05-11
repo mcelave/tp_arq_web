@@ -131,27 +131,25 @@
 
     // Build the UI for a new message and add to the DOM
     function addMessage(data) {
-        // Create element from template and set values
-        var el = createMessageEl();
-        el.find('.message-body').html(data.text);
-        el.find('.author').text(data.username);
-        el.find('.avatar img').attr('src', data.avatar)
-        
-        // Utility to build nicely formatted time
-        el.find('.timestamp').text(strftime('%H:%M:%S %P', new Date(data.timestamp)));
-        
-        var messages = $('#messages');
+        let newMessage = newMessageFrom(data);
+        let messages = $('#messages');
         messages.append(el)
-        
         // Make sure the incoming message is shown
         messages.scrollTop(messages[0].scrollHeight);
     }
 
     // Creates an activity element from the template
-    function createMessageEl() {
-        var text = $('#chat_message_template').text();
-        var el = $(text);
-        return el;
+    function newMessageFrom(data) {
+        let text = $('#chat_message_template').text();
+        let messageObject = $(text);
+        messageObject.find('.message-body').html(data.text);
+        messageObject.find('.author').text(data.username);
+        messageObject.find('.avatar img').attr('src', data.avatar)
+        
+        // Utility to build nicely formatted time
+        messageObject.find('.timestamp').text(strftime('%H:%M:%S %P', new Date(data.timestamp)));
+        
+        return messageObject;
     }
 
     $(init);
@@ -170,10 +168,7 @@
     });
 
     let channelName = <?php echo json_encode($roomName); ?>;
-    var channel = suscribeToChannel(channelName ,pusher);   
-
-  
-
+    let channel = suscribeToChannel(channelName ,pusher);
 </script>
 
 </body>

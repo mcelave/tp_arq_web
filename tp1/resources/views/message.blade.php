@@ -19,55 +19,54 @@
     //funcion para enviar mensajes
     function enviar(user, msg) {
           $.ajax({
-            url: "http://localhost:8000/sendMessage/"+user+"/"+msg,
+            url: location.origin + "/sendMessage/"+user+"/"+msg,
             type: 'GET'
             });      
         }
 
     $( document ).ready(function() {
+      function suscribeToChannel(rawChannelName ,pusher,userName){
+        var channelName = rawChannelName.split(' ').join('_');
+        console.log(channelName);
 
-          function suscribeToChannel(rawChannelName ,pusher,userName){
-            var channelName = rawChannelName.split(' ').join('_');
-            console.log(channelName);
+        //Also remember to change channel and event name if your's are different.
+        var channel = pusher.subscribe(channelName);
 
-            //Also remember to change channel and event name if your's are different.
-            var channel = pusher.subscribe(channelName);
+        channel.bind('client-notify-message', function (data) {
+            // Create element from template and set values
+          
+        if (userName == data.user){    
+         control = '<li style="width:100%">' +
+                  '<div class="msj-rta macro">' +
+                      '<div class="text text-l">' +
+                          '<p>'+ data.message +'</p>' +
+                          '<p><small>'+data.user+'</small></p>' +
+                      '</div>' +
+                  '</div>' +
+              '</li>';  
+          }else{
+              control = '<li style="width:100%">' +
+                  '<div class="msj macro">' +
+                      '<div class="text text-l">' +
+                          '<p>'+ data.message +'</p>' +
+                          '<p><small>'+data.user+'</small></p>' +
+                      '</div>' +
+                  '</div>' +
+              '</li>';  
+          }
+          $("ul").append(control).scrollTop($("ul").prop('scrollHeight')); 
+        });
+        return channel;
+      }
 
-            channel.bind('client-notify-message', function (data) {
-                // Create element from template and set values
-              
-              if (userName == data.user){    
-               control = '<li style="width:100%">' +
-                        '<div class="msj-rta macro">' +
-                            '<div class="text text-l">' +
-                                '<p>'+ data.message +'</p>' +
-                                '<p><small>'+data.user+'</small></p>' +
-                            '</div>' +
-                        '</div>' +
-                    '</li>';  
-                }else{
-                    control = '<li style="width:100%">' +
-                        '<div class="msj macro">' +
-                            '<div class="text text-l">' +
-                                '<p>'+ data.message +'</p>' +
-                                '<p><small>'+data.user+'</small></p>' +
-                            '</div>' +
-                        '</div>' +
-                    '</li>';  
-                }
-                $("ul").append(control).scrollTop($("ul").prop('scrollHeight')); 
-            });
-               return channel;
-        }
+      Pusher.logToConsole = true;
+        var pusher = new Pusher('9565156bc0be46907d1c', {
+          cluster: 'us2',
+          encrypted: true
+        });
 
-         Pusher.logToConsole = true;
-          var pusher = new Pusher('9565156bc0be46907d1c', {
-            cluster: 'us2',
-            encrypted: true
-          });
-
-          let channelName = <?php echo json_encode($roomName); ?>;
-         let userName = <?php echo json_encode($userName); ?>;
+        let channelName = <?php echo json_encode($roomName); ?>;
+        let userName = <?php echo json_encode($userName); ?>;
         var channel = suscribeToChannel(channelName ,pusher, userName); 
 
           $(".mytext").on("keydown", function(e){
@@ -96,19 +95,19 @@
 <h1>{{$roomName}}</h1>
 <h4>Bienvenido {{$userName}}</h4>
 <div class="col-sm-3 col-sm-offset-4 frame">
-            <ul></ul>
-            <div>
-                <div class="msj-rta macro">                        
-                    <div class="text text-r" style="background:whitesmoke !important">
-                        <input class="mytext" placeholder="Type a message"/>
-                    </div> 
+  <ul></ul>
+  <div>
+      <div class="msj-rta macro">                        
+          <div class="text text-r" style="background:whitesmoke !important">
+              <input class="mytext" placeholder="Type a message"/>
+          </div> 
 
-                </div>
-                <div style="padding:10px;">
-                    <span class="glyphicon glyphicon-share-alt"></span>
-                </div>                
-            </div>
-  </div>       
+      </div>
+      <div style="padding:10px;">
+          <span class="glyphicon glyphicon-share-alt"></span>
+      </div>                
+  </div>
+</div>     
 
 </body>
 
