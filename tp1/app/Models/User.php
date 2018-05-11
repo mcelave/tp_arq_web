@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model {    
-
-	
+class User extends Model {
 	protected $fillable = ['name', 'age', 'city'];
 
     /**
@@ -24,6 +22,9 @@ class User extends Model {
 		return User::where(['name'=> $name])->first();
 	}
 
+	public static function getAllUsers() {
+		return User::all(['columns'=>'name']);
+	}
 
 	public function mensajes(){
 		return $this->hasMany(Mensaje::class);

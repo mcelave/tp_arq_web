@@ -39,44 +39,36 @@ class UserController extends Controller
     }
 
 
-     public function guardar(Request $request)
-    {
-        //
+    //  public function guardar(Request $request)
+    // {
+    //     //
 
-       //Remember to set your credentials below.
-        /*$pusher = new Pusher(
-            '9565156bc0be46907d1c',
-            '32a2b4f4346ecfac7ca3',
-            '517414',
-            $options
-        );*/
+    //    //Remember to set your credentials below.
+    //     /*$pusher = new Pusher(
+    //         '9565156bc0be46907d1c',
+    //         '32a2b4f4346ecfac7ca3',
+    //         '517414',
+    //         $options
+    //     );*/
         
-         $pusher = App::make('pusher');
+    //      $pusher = App::make('pusher');
 
 
-        /* Aca hago que el  la accion notify, y le atachedo el notidy event pasando como parametro el el nombre del usuario. Del lado del cliente esto puede verse, en la vista en sala.blade.php  var channel = pusher.subscribe('notify') con su handler. Es parecido al codigo de abajo pero, con pusher todos los clientes se enteran, es decir si tenes otras ventanas abiertas en la lista de usuarios presentes les va va aparecerl porque el handler lo agrega.                 
-        */
-        $pusher->trigger('notify', 'notify-event', $usuario->nombre); 
-
-
-        /* esta parte de codigo dispara un evento pero no a todos los clientes como si lo hace pusher
-        $usuario = DB::table('usuarios')->where('id', $id)->first();
+    //      // Aca hago que el  la accion notify, y le atachedo el notidy event pasando como parametro el el nombre del usuario. Del lado del cliente esto puede verse, en la vista en sala.blade.php  var channel = pusher.subscribe('notify') con su handler. Es parecido al codigo de abajo pero, con pusher todos los clientes se enteran, es decir si tenes otras ventanas abiertas en la lista de usuarios presentes les va va aparecerl porque el handler lo agrega.                 
     
-        $us = new usuario($usuario->nombre, $usuario->id);
-
-        $response = Event::fire( new IngresoUsuario( $us ));
-        */
-        return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' => $usuarios ] );
-
-    }
-
- public function buscarUsuarios(Request $request)
-    {
-
-        $usuarios = DB::table('usuarios')->get();  
-    }
+    //     $pusher->trigger('notify', 'notify-event', $usuario->nombre); 
 
 
+    //     /* esta parte de codigo dispara un evento pero no a todos los clientes como si lo hace pusher
+    //     $usuario = DB::table('usuarios')->where('id', $id)->first();
+    
+    //     $us = new usuario($usuario->nombre, $usuario->id);
+
+    //     $response = Event::fire( new IngresoUsuario( $us ));
+    //     */
+    //     return view('sala',[ 'mensajes' => $mensajes, 'mensaje' =>' ', 'usuarios' => $usuarios ] );
+
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -84,8 +76,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response */
      
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
       /*  $request->validate(
         ['name' => 'required|unique:users',
             'age' => 'required',
@@ -94,11 +85,9 @@ class UserController extends Controller
             'name.unique' => "El Apodo elegido ya está en uso",
             'age.required' => "El campo Edad es obligatorio",
             'city.required' => "El campo Ciudad es obligatorio"]);*/
-           
 
         $user = User::createUser($request['name'], $request['age'], $request['city']);
         return redirect()->action('RoomController@index', ['name' => $request['name']]);
-      
     }
 
     /**
