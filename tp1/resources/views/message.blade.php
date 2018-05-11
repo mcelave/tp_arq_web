@@ -82,7 +82,31 @@
       $('body > div > div > div:nth-child(2) > span').click(function(){
            $(".mytext").trigger({type: 'keydown', which: 13, keyCode: 13}); 
       });
-    
+
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            control = '<li style="width:100%">' +
+              '<div class="msj macro">' +
+              " <img id='blah' src='#' style='width:128px;height:128px;'>"
+              '</div>' +
+              '</li>';  
+
+            $("ul").append(control).scrollTop($("ul").prop('scrollHeight')) 
+            $('#blah').attr('src', e.target.result);
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      $('#image').change(function(){
+        readURL(this);
+      });
+      
+
+
 
     });
          
@@ -105,7 +129,10 @@
       </div>
       <div style="padding:10px;">
           <span class="glyphicon glyphicon-share-alt"></span>
-      </div>                
+      </div>
+      <input id="image" type="file" class="btn btn-default btn-sm btn-round">
+        <span class="glyphicon glyphicon-paperclip"></span>
+      </input>         
   </div>
 </div>     
 
