@@ -18,11 +18,11 @@
     <script>
     //funcion para enviar mensajes
     function enviar(user, msg) {
-          $.ajax({
-            url: location.origin + "/sendMessage/"+user+"/"+msg,
-            type: 'GET'
-            });      
-        }
+      $.ajax({
+        url: location.origin + "/sendMessage/"+user+"/"+msg,
+        type: 'GET'
+      });      
+    }
 
     $( document ).ready(function() {
       function suscribeToChannel(rawChannelName ,pusher,userName){
@@ -83,7 +83,12 @@
            $(".mytext").trigger({type: 'keydown', which: 13, keyCode: 13}); 
       });
     
+      setLinkToAllUsers();
 
+      function setLinkToAllUsers() {
+        let userName = <?php echo json_encode($userName); ?>;
+        $(linkToAllUsers).append("<a href=" + location.origin + "/allUsers/" + userName +">Lista de usuarios</a>")
+      }
     });
          
 
@@ -94,6 +99,7 @@
 <body>
 <h1>{{$roomName}}</h1>
 <h4>Bienvenido {{$userName}}</h4>
+<h6 id="linkToAllUsers"></h6>
 <div class="col-sm-3 col-sm-offset-4 frame">
   <ul></ul>
   <div>

@@ -133,7 +133,7 @@
     function addMessage(data) {
         let newMessage = newMessageFrom(data);
         let messages = $('#messages');
-        messages.append(el)
+        messages.append(newMessage)
         // Make sure the incoming message is shown
         messages.scrollTop(messages[0].scrollHeight);
     }

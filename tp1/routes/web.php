@@ -33,7 +33,7 @@ Route::get('/sala','SalaController@buscarMensajes');
 
 Route::get('/notify', 'PusherController@sendNotification');
 
-Route::get('/allusers', 'RoomController@showAllUsers');
+Route::get('/allUsers/{thisUser}', 'RoomController@showAllUsers');
 
 Route::view('/home', 'home');
 

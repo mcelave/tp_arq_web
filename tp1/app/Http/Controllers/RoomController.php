@@ -40,8 +40,8 @@ class RoomController extends Controller
             array('message' => $message, 'user' => $user));
     }
 
-    public function showAllUsers(Request $request) {
-        return view('allusers',['users' => User::getAllUsers()]);
+    public function showAllUsers($thisUser) {
+        return view('allUsers',['users' => User::getAllUsers(), 'thisUser' => $thisUser]);
     }
 
     /**
