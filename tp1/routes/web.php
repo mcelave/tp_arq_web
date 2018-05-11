@@ -26,7 +26,8 @@ Route::post('/users/store', 'UserController@store');
 
 Route::get('/room', 'RoomController@index');
 
-Route::post('/sendMessage/{data}', 'RoomController@trigger');
+Route::get('/sendMessage/{user}/{message}', 'RoomController@trigger');
+//Route::get('/sendMessage', 'RoomController@trigger');
 
 Route::get('/sala','SalaController@buscarMensajes');
 

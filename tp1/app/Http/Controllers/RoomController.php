@@ -24,23 +24,27 @@ class RoomController extends Controller
         
         $mainRoom->host($user);
 
-        return view('message', ['roomName'=> $mainRoom->name ]);
+        return view('message', ['roomName'=> $mainRoom->name, 'userName' => $user->name ]);
 
         
     }
 
 
 
-    public function trigger( $request)
+    public function trigger($user,$message )
     {
         $pusher = App::make('pusher');
+         echo 'entre al controller';
 
-        dd($request);
+       // dd($request);
 
 
         //primer parametro nombre del channel, segundo el nombre del evento
-        $pusher->trigger('Lobby_principal', 'client-notify-message', $request );
+        //$pusher->trigger('Lobby_principal', 'client-notify-message', 'hola' );
+        $pusher->trigger('Lobby_principal', 'client-notify-message', 
+            array('message' => $message, 'user' => $user));
 
+           
     }
 
 
