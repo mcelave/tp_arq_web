@@ -15,22 +15,7 @@ function enviar(user, msg) {
     });      
   }
 
-function onChange(event) {
 
-  var file = event.target.files[0];
-  var extension = file.name.split('.')[1];
-  var reader = new FileReader();
-    reader.onload = function(event) {
-    // The file's text will be printed here
-
-    var imagen = event.target.result;
-    imagen.replace(/^data:image\/(png|jpg);base64,/, "");
-    sendImage('martin',imagen, extension);
-
-    };
-  reader.readAsDataURL(file);
-   
-}
 
  $.ajaxSetup({
         headers: {

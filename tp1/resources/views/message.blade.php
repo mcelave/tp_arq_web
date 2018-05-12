@@ -17,8 +17,55 @@
     <script src="js/utils.js"></script>
 
     <script>
- 
+
+   
+        function sendImage(user, msg,extension) {
+          $.ajax({
+            url: location.origin + "/sendImage",
+            type: 'POST',
+            data: {user: user, image: msg, extension: extension},
+            
+          });      
+        }
+
+       function onChange(event,userName) {
+
+          var file = event.target.files[0];
+          var extension = file.name.split('.')[1];
+          var reader = new FileReader();
+            reader.onload = function(event) {
+            // The file's text will be printed here
+
+            var imagen = event.target.result;
+            imagen.replace(/^data:image\/(png|jpg);base64,/, "");
+            sendImage(userName,imagen, extension);
+
+            };
+          reader.readAsDataURL(file);
+           
+        } 
+
+
     $( document ).ready(function() {
+
+
+       $.ajaxSetup({
+              headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+        });
+
+        function sendImage(user, msg,extension) {
+          $.ajax({
+            url: location.origin + "/sendImage",
+            type: 'POST',
+            data: {user: user, image: msg, extension: extension},
+            
+
+          });      
+        }
+
+
      
       function getBase64Image(img) {
         var canvas = document.createElement("canvas");
@@ -39,8 +86,10 @@
 
         let channelName = <?php echo json_encode($roomName); ?>;
         let user = <?php echo json_encode($user); ?>;
-        var channel = suscribeToChannel(channelName, pusher, user.name); 
+        var channel = suscribeToChannel(channelName, pusher, user.name);
 
+          
+      
           $(".mytext").on("keydown", function(e){
               if (e.which == 13){
                   var text = $(this).val();
@@ -65,6 +114,8 @@
          reader.readAsDataURL(input.files[0]);
         }
       }
+
+
 
       setLinkToAllUsers();
 
