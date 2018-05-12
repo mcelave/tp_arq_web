@@ -26,6 +26,7 @@ Route::post('/users/store', 'UserController@store');
 
 Route::get('/room', 'RoomController@index');
 Route::get('/sendMessage/{user}/{message}', 'RoomController@sendMessage');
+
 Route::get('/allUsers/{thisUserId}', 'RoomController@showAllUsers');
 
 Route::get('/startPrivateConversation', 'AllUsersController@startPrivateConversation');

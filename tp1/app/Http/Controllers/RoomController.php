@@ -9,7 +9,6 @@ use Pusher\Pusher;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 
-
 class RoomController extends Controller {
     public function index(Request $request) {
         $mainRoom = Room::getMainRoom();
