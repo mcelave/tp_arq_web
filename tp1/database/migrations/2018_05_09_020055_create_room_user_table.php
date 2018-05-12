@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 use App\Models\Room;
 
-class CreateUsersByRoomTable extends Migration
+class CreateRoomUserTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,13 +15,13 @@ class CreateUsersByRoomTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_by_room', function (Blueprint $table) {
+        Schema::create('room_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('userId');
-            $table->unsignedInteger('roomId');
+            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('room_id');
             $table->timestamps();
-            $table->foreign('userId')->references('id')->on('users');
-            $table->foreign('roomId')->references('id')->on('rooms');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('room_id')->references('id')->on('rooms');
         });
 
         Room::createMainRoom();

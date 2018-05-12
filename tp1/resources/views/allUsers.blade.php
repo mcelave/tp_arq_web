@@ -13,14 +13,13 @@
       $(document).ready(function() {
         let users = <?php echo json_encode($users); ?>;
         users.forEach(function(user) { 
-          add(user.name);
+          display(user);
         })
 
-        function add(username) { 
+        function display(user) { 
           let thisUser = <?php echo json_encode($thisUser); ?>;
-          let hrefString = location.origin + '/startNewRoom/&members=' + username + ',' + thisUser;
-          //con en el controller podemos getear los integrantes de la sala $category = Input::get('members', 'default category');
-          $("#names-list").append('<div><a href=' + hrefString + ' id=' + username + '>' + username + '</a></div>');
+          let hrefString = location.origin + '/startPrivateConversation?members=' + thisUser.id + ',' + user.id;
+          $("#names-list").append('<div><a href=' + hrefString + ' id=' + user.id + '>' + user.name + '</a></div>');
         }
       });
     </script>

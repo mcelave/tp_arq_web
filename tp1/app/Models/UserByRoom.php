@@ -6,22 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
  class UserByRoom extends Model {
 
-    protected $table = 'users_by_room';
-    protected $fillable = ['userId', 'roomId'];
+    protected $table = 'room_user';
+    protected $fillable = ['user_id', 'room_id'];
 
     public static function defineRelationship($user, $room) {
-        return UserByRoom::create(['userId' => $user->id, 'roomId' => $room->id]);
-    }
-
-    public static function usersIn($room) {
-        return UserByRoom::where(['roomId' => $room->id])->pluck('user');
-    }
-
-    public static function roomsFor($user) {
-        return UserByRoom::where(['userId' => $user->id])->pluck('room');
+        $room-> users()-> save($user);
+        // return UserByRoom::create(['user_id' => $user->id, 'roomId' => $room->id]);
     }
 
     public static function hosting($room, $user) {
-        return UserByRoom::where(['userId' => $user->id, 'roomId' => $room->id])->get()->isNotEmpty();
+        // $room-> users()-> save($user);
+        // $user-> rooms()-> save($room);
+        // return UserByRoom::where(['user_id' => $user->id, 'roomId' => $room->id])->get()->isNotEmpty();
     }
 }

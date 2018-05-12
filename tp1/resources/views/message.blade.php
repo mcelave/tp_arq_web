@@ -66,14 +66,14 @@
         });
 
         let channelName = <?php echo json_encode($roomName); ?>;
-        let userName = <?php echo json_encode($userName); ?>;
-        var channel = suscribeToChannel(channelName ,pusher, userName); 
+        let user = <?php echo json_encode($user); ?>;
+        var channel = suscribeToChannel(channelName, pusher, user.name); 
 
           $(".mytext").on("keydown", function(e){
               if (e.which == 13){
                   var text = $(this).val();
                   if (text !== ""){
-                      enviar(userName, text);              
+                      enviar(user.name, text);
                       $(this).val('');
                   }
               }
@@ -86,8 +86,8 @@
       setLinkToAllUsers();
 
       function setLinkToAllUsers() {
-        let userName = <?php echo json_encode($userName); ?>;
-        $(linkToAllUsers).append("<a href=" + location.origin + "/allUsers/" + userName +">Lista de usuarios</a>")
+        let user = <?php echo json_encode($user); ?>;
+        $(linkToAllUsers).append("<a href=" + location.origin + "/allUsers/" + user.id +">Lista de usuarios</a>")
       }
     });
          
@@ -98,7 +98,7 @@
   </head>
 <body>
 <h1>{{$roomName}}</h1>
-<h4>Bienvenido {{$userName}}</h4>
+<h4>Bienvenido {{$user -> name}}</h4>
 <h6 id="linkToAllUsers"></h6>
 <div class="col-sm-3 col-sm-offset-4 frame">
   <ul></ul>

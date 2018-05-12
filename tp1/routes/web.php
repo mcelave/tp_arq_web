@@ -25,16 +25,15 @@ Route::get('/','UserController@index');
 Route::post('/users/store', 'UserController@store');
 
 Route::get('/room', 'RoomController@index');
+Route::get('/sendMessage/{user}/{message}', 'RoomController@sendMessage');
+Route::get('/allUsers/{thisUserId}', 'RoomController@showAllUsers');
 
-Route::get('/sendMessage/{user}/{message}', 'RoomController@trigger');
-//Route::get('/sendMessage', 'RoomController@trigger');
-
-Route::get('/sala','SalaController@buscarMensajes');
+Route::get('/startPrivateConversation', 'AllUsersController@startPrivateConversation');
 
 Route::get('/notify', 'PusherController@sendNotification');
 
-Route::get('/allUsers/{thisUser}', 'RoomController@showAllUsers');
-
+//Controllers que no se usan y hay que borrar
+Route::get('/sala','SalaController@buscarMensajes');
 Route::view('/home', 'home');
 
 Route::get('/hello',function(){

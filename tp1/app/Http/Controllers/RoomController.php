@@ -7,30 +7,21 @@ use  App\Models\Room;
 use  App\Models\User;
 use Pusher\Pusher;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Input;
 
 
-class RoomController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
+class RoomController extends Controller {
+    public function index(Request $request) {
         $mainRoom = Room::getMainRoom();
-        
-        $user = User::getUserNamed( $request['name']);
-        
+        $user = User::getUserNamed($request['name']);
         $mainRoom->host($user);
-
-        return view('message', ['roomName'=> $mainRoom->name, 'userName' => $user->name ]);
-
-        
+        return view('message', [
+                'roomName'=> $mainRoom->name,
+                'user' => $user ]
+        );
     }
 
-    public function trigger($user,$message )
-    {
+    public function sendMessage($user, $message) {
         $pusher = App::make('pusher');
          echo 'entre al controller';
 
@@ -40,73 +31,36 @@ class RoomController extends Controller
             array('message' => $message, 'user' => $user));
     }
 
-    public function showAllUsers($thisUser) {
+    public function showAllUsers($thisUserId) {
+        $thisUser = User::find($thisUserId);
         return view('allUsers',['users' => User::getAllUsers(), 'thisUser' => $thisUser]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public static function openPrivateChat($firstUser, $secondUser) {
+        $private = function ($room) { 
+            return $room['private'];
+        };
+
+        $firstUserPrivateRooms = $firstUser-> rooms()-> get()-> filter($private);
+
+        foreach ($firstUserPrivateRooms as $privateRoom) {
+            if ($privateRoom-> users()-> get()-> contains('id', $secondUser->id)) {
+                return view('message', [
+                    'roomName' => $privateRoom-> name,
+                    'user' => $firstUser
+                ]);
+            }
+        }
+    
+        return RoomController::create($firstUser, [$firstUser, $secondUser], true, 'Sala Privada');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    private static function create($user, $members, $private, $roomName) {
+        $newRoom = Room::createRoom($roomName, $members, $private);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('message', [
+            'roomName'=> $roomName,
+            'user' => $user
+        ]);
     }
 }

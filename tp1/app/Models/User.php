@@ -14,7 +14,7 @@ class User extends Model {
      */
     protected $hidden = [];
 
-	public static function createUser($name,$age,$city){
+	public static function createUser($name, $age, $city){
 		return User::create(['name'=> $name, 'age'=> $age, 'city' => $city ]);
 	}
 
@@ -23,10 +23,14 @@ class User extends Model {
 	}
 
 	public static function getAllUsers() {
-		return User::all(['columns'=>'name']);
+		return User::all();
 	}
 
 	public function mensajes(){
 		return $this->hasMany(Mensaje::class);
+	}
+
+	public function rooms() {
+		return $this -> belongsToMany('App\Models\Room');
 	}
 }
