@@ -22,13 +22,41 @@ class RoomController extends Controller {
 
     public function sendMessage($user, $message) {
         $pusher = App::make('pusher');
-         echo 'entre al controller';
 
-        //primer parametro nombre del channel, segundo el nombre del evento
-        //$pusher->trigger('Lobby_principal', 'client-notify-message', 'hola' );
         $pusher->trigger('Lobby_principal', 'client-notify-message', 
             array('message' => $message, 'user' => $user));
     }
+    
+    public function triggerImage(Request $request)
+    {
+        $pusher = App::make('pusher');
+        
+          $user = $request['user'];
+          $img = $request['image'];
+          $extension = $request['extension'];
+
+         define('UPLOAD_DIR', public_path());
+      
+
+            $uniqueIDAndExtension = uniqid().'.'.$extension;
+            
+            $output_file = UPLOAD_DIR .'\\'.  $uniqueIDAndExtension;
+             
+             $ifp = fopen( $output_file, 'wb' ); 
+
+            $data = explode( ',', $img );
+
+            // we could add validation here with ensuring count( $data ) > 1
+            fwrite( $ifp, base64_decode( $data[ 1 ] ) );
+
+            fclose( $ifp );   
+
+        //primer parametro nombre del channel, segundo el nombre del evento
+        $pusher->trigger('Lobby_principal', 'client-notify-image', 
+            array('image' => $uniqueIDAndExtension, 'user' => $user));
+    }
+
+
 
     public function showAllUsers($thisUserId) {
         $thisUser = User::find($thisUserId);
