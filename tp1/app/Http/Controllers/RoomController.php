@@ -15,48 +15,45 @@ class RoomController extends Controller {
         $user = User::getUserNamed($request['name']);
         $mainRoom->host($user);
         return view('message', [
-                'roomName'=> $mainRoom->name,
+                'room'=> $mainRoom,
                 'user' => $user ]
         );
     }
 
-    public function sendMessage($user, $message) {
+    public function sendMessage($user, $message, $channelName) {
         $pusher = App::make('pusher');
 
-        $pusher->trigger('Lobby_principal', 'client-notify-message', 
+        $pusher->trigger($channelName, 'client-notify-message', 
             array('message' => $message, 'user' => $user));
     }
     
-    public function triggerImage(Request $request)
-    {
+    public function sendImage() {
+        $user = Input::get('members');
+        $img = Input::get('image');
+        $extension = Input::get('extension');
+        $channelName = Input::get('channelName');
+
         $pusher = App::make('pusher');
-        
-          $user = $request['user'];
-          $img = $request['image'];
-          $extension = $request['extension'];
 
-         define('UPLOAD_DIR', public_path());
+        define('UPLOAD_DIR', public_path());
       
+        $uniqueIDAndExtension = uniqid().'.'.$extension;
+        
+        $output_file = UPLOAD_DIR .'\\'.  $uniqueIDAndExtension;
+         
+        $ifp = fopen( $output_file, 'wb' ); 
 
-            $uniqueIDAndExtension = uniqid().'.'.$extension;
-            
-            $output_file = UPLOAD_DIR .'\\'.  $uniqueIDAndExtension;
-             
-             $ifp = fopen( $output_file, 'wb' ); 
+        $data = explode( ',', $img );
 
-            $data = explode( ',', $img );
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[ 1 ] ) );
 
-            // we could add validation here with ensuring count( $data ) > 1
-            fwrite( $ifp, base64_decode( $data[ 1 ] ) );
-
-            fclose( $ifp );   
+        fclose( $ifp );   
 
         //primer parametro nombre del channel, segundo el nombre del evento
-        $pusher->trigger('Lobby_principal', 'client-notify-image', 
+        $pusher->trigger($channelName, 'client-notify-image', 
             array('image' => $uniqueIDAndExtension, 'user' => $user));
     }
-
-
 
     public function showAllUsers($thisUserId) {
         $thisUser = User::find($thisUserId);
@@ -73,7 +70,7 @@ class RoomController extends Controller {
         foreach ($firstUserPrivateRooms as $privateRoom) {
             if ($privateRoom-> users()-> get()-> contains('id', $secondUser->id)) {
                 return view('message', [
-                    'roomName' => $privateRoom-> name,
+                    'room' => $privateRoom,
                     'user' => $firstUser
                 ]);
             }
@@ -83,10 +80,10 @@ class RoomController extends Controller {
     }
 
     private static function create($user, $members, $private, $roomName) {
-        $newRoom = Room::createRoom($roomName, $members, $private);
+        $room = Room::createRoom($roomName, $members, $private);
 
         return view('message', [
-            'roomName'=> $roomName,
+            'room'=> $room,
             'user' => $user
         ]);
     }

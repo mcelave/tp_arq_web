@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Input;
 class AllUsersController extends Controller
 {
     public function startPrivateConversation() {
-        $memberIdsString = Input::get('members', 'default category');
+        $memberIdsString = Input::get('members');
         $memberIdsArray = explode(",", $memberIdsString);
 
         $getMemberFromId = function($memberId) {

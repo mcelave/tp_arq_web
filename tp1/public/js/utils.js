@@ -1,6 +1,6 @@
-function enviar(user, msg) {
+function enviar(user, msg, channelName) {
     $.ajax({
-      url: location.origin + "/sendMessage/"+user+"/"+msg,
+      url: location.origin + "/sendMessage/" + user + "/" + msg + "/" + channelName,
       type: 'GET'
     });      
   }
@@ -10,12 +10,8 @@ function enviar(user, msg) {
       url: location.origin + "/sendImage",
       type: 'POST',
       data: {user: user, image: msg, extension: extension},
-      
-
     });      
   }
-
-
 
  $.ajaxSetup({
         headers: {
@@ -23,8 +19,7 @@ function enviar(user, msg) {
         }
   });
 
-function suscribeToChannel(rawChannelName ,pusher,userName){
-  var channelName = rawChannelName.split(' ').join('_');
+function suscribeToChannel(channelName, pusher, userName){
   console.log(channelName);
 
   //Also remember to change channel and event name if your's are different.

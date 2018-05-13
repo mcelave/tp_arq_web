@@ -25,8 +25,8 @@ Route::get('/','UserController@index');
 Route::post('/users/store', 'UserController@store');
 
 Route::get('/room', 'RoomController@index');
-Route::get('/sendMessage/{user}/{message}', 'RoomController@sendMessage');
-Route::post('/sendImage', 'RoomController@triggerImage');
+Route::get('/sendMessage/{user}/{message}/{channelName}', 'RoomController@sendMessage');
+Route::post('/sendImage', 'RoomController@sendImage');
 
 Route::get('/allUsers/{thisUserId}', 'RoomController@showAllUsers');
 //Route::get('/sendMessage', 'RoomController@trigger');

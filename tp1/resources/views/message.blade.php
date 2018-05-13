@@ -17,14 +17,12 @@
     <script src="js/utils.js"></script>
 
     <script>
-
    
         function sendImage(user, msg,extension) {
           $.ajax({
             url: location.origin + "/sendImage",
             type: 'POST',
-            data: {user: user, image: msg, extension: extension},
-            
+            data: {user: user, image: msg, extension: extension, channelName: channelName},
           });      
         }
 
@@ -45,6 +43,8 @@
            
         } 
 
+    let room = <?php echo json_encode($room); ?>;
+    let channelName = "room_channel_" + room.roomId;
 
     $( document ).ready(function() {
 
@@ -65,8 +65,6 @@
           });      
         }
 
-
-     
       function getBase64Image(img) {
         var canvas = document.createElement("canvas");
         canvas.width = img.width;
@@ -77,28 +75,24 @@
         return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
       }
       
-
       Pusher.logToConsole = true;
         var pusher = new Pusher('9565156bc0be46907d1c', {
           cluster: 'us2',
           encrypted: true
         });
 
-        let channelName = <?php echo json_encode($roomName); ?>;
         let user = <?php echo json_encode($user); ?>;
         var channel = suscribeToChannel(channelName, pusher, user.name);
 
-          
-      
-          $(".mytext").on("keydown", function(e){
-              if (e.which == 13){
-                  var text = $(this).val();
-                  if (text !== ""){
-                      enviar(user.name, text);
-                      $(this).val('');
-                  }
-              }
-          });
+        $(".mytext").on("keydown", function(e){
+            if (e.which == 13){
+                var text = $(this).val();
+                if (text !== "") {
+                  enviar(user.name, text, channelName);
+                  $(this).val('');
+                }
+            }
+        });
 
       $('body > div > div > div:nth-child(2) > span').click(function(){
            $(".mytext").trigger({type: 'keydown', which: 13, keyCode: 13}); 
@@ -115,8 +109,6 @@
         }
       }
 
-
-
       setLinkToAllUsers();
 
       function setLinkToAllUsers() {
@@ -124,14 +116,13 @@
         $(linkToAllUsers).append("<a href=" + location.origin + "/allUsers/" + user.id +">Lista de usuarios</a>")
       }
     });
-         
 
     </script>
-    <title>{{$roomName}}</title>
+    <title>{{$room-> name}}</title>
 
   </head>
 <body>
-<h1>{{$roomName}}</h1>
+<h1>{{$room-> name}}</h1>
 <h4>Bienvenido {{$user -> name}}</h4>
 <h6 id="linkToAllUsers"></h6>
 <div class="col-sm-3 col-sm-offset-4 frame">
