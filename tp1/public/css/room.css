@@ -42,7 +42,18 @@
 .frame > div:last-of-type{
     position:absolute;bottom:0;width:100%;display:flex;
 }
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
 body > div > div > div:nth-child(2) > span{
+    background: whitesmoke;padding: 10px;font-size: 21px;border-radius: 50%;
+}
+body > div > div > div:nth-child(3) > label {
     background: whitesmoke;padding: 10px;font-size: 21px;border-radius: 50%;
 }
 body > div > div > div.msj-rta.macro{

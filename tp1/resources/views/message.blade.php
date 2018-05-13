@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
      <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> 
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
      <script src="https://js.pusher.com/4.2/pusher.min.js"></script>
     <link href="css/room.css" rel="stylesheet" >
@@ -144,10 +144,10 @@
       <div style="padding:10px;">
           <span class="glyphicon glyphicon-share-alt"></span>
       </div>
-      <input id="image" type="file" class="btn btn-default btn-sm btn-round" onchange="onChange(event)">
-        <span class="glyphicon glyphicon-paperclip"></span>
-      </input>    
-
+      <div style="padding:10px;">
+        <input id="image" name="image" type="file" class="inputfile" onchange="onChange(event)"> </input>
+        <label for="image" class="glyphicon glyphicon-camera"></label>
+      </div>
        
   </div>
 
