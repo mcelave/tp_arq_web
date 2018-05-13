@@ -44,7 +44,7 @@
         } 
 
     let room = <?php echo json_encode($room); ?>;
-    let channelName = "room_channel_" + room.roomId;
+    let channelName = "room_channel_" + room.id;
 
     $( document ).ready(function() {
 
