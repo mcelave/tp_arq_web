@@ -2,31 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Http\Request;
-use  App\Models\Room;
-use  App\Models\User;
-use Pusher\Pusher;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Input;
 
 class RoomController extends Controller {
-    public function index(Request $request) {
-        $mainRoom = Room::getMainRoom();
-        $user = User::getUserNamed($request['name']);
-        $mainRoom->host($user);
-        return view('message', [
-                'room'=> $mainRoom,
-                'user' => $user ]
-        );
+
+    public function mainRoom(Request $request) {
+        $room = Room::mainRoom();
+        $user = User::named($request['name']);
+        $channelName = "room_channel_".$room->id;
+
+        $room->host($user);
+        return view('room', compact('room', 'user', 'channelName'));
     }
 
     public function sendMessage($user, $message, $channelName) {
         $pusher = App::make('pusher');
-
-        $pusher->trigger($channelName, 'client-notify-message', 
+        $pusher->trigger($channelName, 'client-notify-message',
             array('message' => $message, 'user' => $user));
     }
-    
+
     public function sendImage() {
         $user = Input::get('members');
         $img = Input::get('image');
@@ -34,30 +32,24 @@ class RoomController extends Controller {
         $channelName = Input::get('channelName');
 
         $pusher = App::make('pusher');
-
-        define('UPLOAD_DIR', public_path());
-      
+        $uploadDir = public_path().'/img/';
         $uniqueIDAndExtension = uniqid().'.'.$extension;
-        
-        $output_file = UPLOAD_DIR .'\\'.  $uniqueIDAndExtension;
+        $output_file = $uploadDir.$uniqueIDAndExtension;
          
-        $ifp = fopen( $output_file, 'wb' ); 
+        $ifp = fopen($output_file, 'wb');
+        $data = explode(',', $img);
+        fwrite($ifp, base64_decode($data[1]));
+        fclose($ifp);
 
-        $data = explode( ',', $img );
-
-        // we could add validation here with ensuring count( $data ) > 1
-        fwrite( $ifp, base64_decode( $data[ 1 ] ) );
-
-        fclose( $ifp );   
-
-        //primer parametro nombre del channel, segundo el nombre del evento
-        $pusher->trigger($channelName, 'client-notify-image', 
+        echo $uniqueIDAndExtension;
+        echo $user;
+        $pusher->trigger($channelName, 'client-notify-image',
             array('image' => $uniqueIDAndExtension, 'user' => $user));
     }
 
     public function showAllUsers($thisUserId) {
         $thisUser = User::find($thisUserId);
-        return view('allUsers',['users' => User::getAllUsers(), 'thisUser' => $thisUser]);
+        return view('allUsers',['users' => User::allUsers(), 'thisUser' => $thisUser]);
     }
 
     public static function openPrivateChat($firstUser, $secondUser) {
@@ -69,9 +61,10 @@ class RoomController extends Controller {
 
         foreach ($firstUserPrivateRooms as $privateRoom) {
             if ($privateRoom-> users()-> get()-> contains('id', $secondUser->id)) {
-                return view('message', [
+                return view('room', [
                     'room' => $privateRoom,
-                    'user' => $firstUser
+                    'user' => $firstUser,
+                    'channelName' => "room_channel_".$privateRoom->id
                 ]);
             }
         }
@@ -80,11 +73,12 @@ class RoomController extends Controller {
     }
 
     private static function create($user, $members, $private, $roomName) {
-        $room = Room::createRoom($roomName, $members, $private);
+        $room = Room::definedBy($roomName, $members, $private);
 
-        return view('message', [
+        return view('room', [
             'room'=> $room,
-            'user' => $user
+            'user' => $user,
+            'channelName' => "room_channel_".$room->id
         ]);
     }
 }

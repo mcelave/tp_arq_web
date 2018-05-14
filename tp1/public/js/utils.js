@@ -1,34 +1,41 @@
-function enviar(user, msg, channelName) {
-    $.ajax({
-      url: location.origin + "/sendMessage/" + user + "/" + msg + "/" + channelName,
-      type: 'GET'
-    });      
-  }
+function newPusher() {
+    return new Pusher('9565156bc0be46907d1c', {
+        cluster: 'us2',
+        encrypted: true});
+}
 
-  function sendImage(user, msg,extension) {
-    $.ajax({
-      url: location.origin + "/sendImage",
-      type: 'POST',
-      data: {user: user, image: msg, extension: extension},
-    });      
-  }
-
- $.ajaxSetup({
+function ajaxSetup() {
+    $.ajaxSetup({
         headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-  });
+    });
+}
+
+function sendMessage(user, msg, channelName) {
+    $.ajax({
+        url: location.origin + "/sendMessage/" + user + "/" + msg + "/" + channelName,
+        type: 'GET'
+    });
+}
+
+function sendImage(user, msg, extension, channelName) {
+    $.ajax({
+        url: location.origin + "/sendImage",
+        type: 'POST',
+        data: {user: user, image: msg, extension: extension, channelName: channelName},
+    });
+}
 
 function suscribeToChannel(channelName, pusher, userName){
-  console.log(channelName);
 
-  //Also remember to change channel and event name if your's are different.
-  var channel = pusher.subscribe(channelName);
+    var channel = pusher.subscribe(channelName);
+    var control;
 
-  channel.bind('client-notify-message', function (data) {
-    
-  if (userName == data.user){    
-   control = '<li style="width:100%">' +
+    channel.bind('client-notify-message', function (data) {
+
+    if (userName == data.user){
+        control = '<li style="width:100%">' +
             '<div class="msj-rta macro">' +
                 '<div class="text text-l">' +
                     '<p>'+ data.message +'</p>' +
@@ -36,7 +43,7 @@ function suscribeToChannel(channelName, pusher, userName){
                 '</div>' +
             '</div>' +
         '</li>';  
-    }else{
+    } else {
         control = '<li style="width:100%">' +
             '<div class="msj macro">' +
                 '<div class="text text-l">' +
@@ -48,22 +55,37 @@ function suscribeToChannel(channelName, pusher, userName){
     }
     $("ul").append(control).scrollTop($("ul").prop('scrollHeight')); 
   });
+
   //para imagen
    channel.bind('client-notify-image', function (data) {
-      var user = data.user;
-      var image = data.image;
-        alert(image);
+       alert(data.image);
+       var user = data.user;
+      var image = "img\\" + data.image;
 
         control = '<li style="width:100%">' +
         '<div class="msj macro">' +
-        " <img src='" +image  + "' style='width:128px;height:128px;'>"+
-       // " <canvas id='imgCanvas' />"+
+        "<img src='" +image  + "' style='width:128px;height:128px;'>" +
+            '<p><small>'+user+'</small></p>' +
         '</div>' +
         '</li>';  
 
-      $("ul").append(control).scrollTop($("ul").prop('scrollHeight')) 
+      $("ul").append(control).scrollTop($("ul").prop('scrollHeight'));
 
    });
+}
 
-  return channel;
+function onChange(event, user) {
+    var file = event.target.files[0];
+    var extension = file.name.split('.')[1];
+    var reader = new FileReader();
+    reader.onload = function(event) {
+        var imagen = event.target.result;
+        imagen.replace(/^data:image\/(png|jpg);base64,/, "");
+        sendImage(user.name,imagen, extension, 'client-notify-image');
+    };
+    reader.readAsDataURL(file);
+}
+
+function setLinkToAllUsers(user) {
+    $(linkToAllUsers).append("<a href=" + location.origin + "/allUsers/" + user.id +">Lista de usuarios</a>")
 }

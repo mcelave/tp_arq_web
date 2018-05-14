@@ -6,15 +6,9 @@ use Illuminate\Database\Migrations\Migration;
 
 use App\Models\Room;
 
-class CreateRoomUserTable extends Migration
-{
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
+class CreateRoomUserTable extends Migration {
+
+    public function up() {
         Schema::create('room_user', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
@@ -27,13 +21,7 @@ class CreateRoomUserTable extends Migration
         Room::createMainRoom();
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
+    public function down() {
         Schema::dropIfExists('users_by_room');
     }
 }
