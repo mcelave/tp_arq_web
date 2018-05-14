@@ -17,13 +17,13 @@ Route::post('/users/store', 'UserController@store');
 
 Route::get('/room', 'RoomController@mainRoom');
 
+Route::post('room/sendMessage', 'RoomController@sendMessage');
+
+Route::post('room/sendImage', 'RoomController@sendImage');
 
 
 
 
-
-Route::get('/sendMessage/{user}/{message}/{channelName}', 'RoomController@sendMessage');
-Route::post('/sendImage', 'RoomController@sendImage');
 
 Route::get('/allUsers/{thisUserId}', 'RoomController@showAllUsers');
 

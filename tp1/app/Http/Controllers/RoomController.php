@@ -6,7 +6,6 @@ use App\Models\Room;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Input;
 
 class RoomController extends Controller {
 
@@ -19,17 +18,17 @@ class RoomController extends Controller {
         return view('room', compact('room', 'user', 'channelName'));
     }
 
-    public function sendMessage($user, $message, $channelName) {
+    public function sendMessage(Request $request) {
         $pusher = App::make('pusher');
-        $pusher->trigger($channelName, 'client-notify-message',
-            array('message' => $message, 'user' => $user));
+        $pusher->trigger($request['channelName'], 'client-notify-message',
+            array('message' => $request['message'], 'user' => $request['user']));
     }
 
-    public function sendImage() {
-        $user = Input::get('members');
-        $img = Input::get('image');
-        $extension = Input::get('extension');
-        $channelName = Input::get('channelName');
+    public function sendImage(Request $request) {
+        $user = $request['user'];
+        $image = $request['image'];
+        $extension = $request['extension'];
+        $channelName = $request['channelName'];
 
         $pusher = App::make('pusher');
         $uploadDir = public_path().'/img/';
@@ -37,12 +36,10 @@ class RoomController extends Controller {
         $output_file = $uploadDir.$uniqueIDAndExtension;
          
         $ifp = fopen($output_file, 'wb');
-        $data = explode(',', $img);
+        $data = explode(',', $image);
         fwrite($ifp, base64_decode($data[1]));
         fclose($ifp);
 
-        echo $uniqueIDAndExtension;
-        echo $user;
         $pusher->trigger($channelName, 'client-notify-image',
             array('image' => $uniqueIDAndExtension, 'user' => $user));
     }

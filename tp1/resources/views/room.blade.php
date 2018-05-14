@@ -63,7 +63,7 @@
                 <span class="glyphicon glyphicon-share-alt"></span>
             </div>
             <div style="padding:10px;">
-                <input id="image" name="image" type="file" class="inputfile" onchange="onChange(event, currentUser)"></input>
+                <input id="image" name="image" type="file" class="inputfile" onchange="onChange(event, currentUser, channelName)"></input>
                 <label for="image" class="glyphicon glyphicon-camera"></label>
             </div>
         </div>
