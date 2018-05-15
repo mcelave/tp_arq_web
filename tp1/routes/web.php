@@ -15,18 +15,23 @@ Route::get('/','UserController@index');
 
 Route::post('/users/store', 'UserController@store');
 
+Route::get('/users/{userName}', 'UserController@show');
+
+Route::get('/users/all/{userName}', 'UserController@showAll');
+
+
 Route::get('/room', 'RoomController@mainRoom');
 
 Route::post('room/sendMessage', 'RoomController@sendMessage');
 
 Route::post('room/sendImage', 'RoomController@sendImage');
 
+Route::get('/room/all/{userName}', 'RoomController@showAll');
 
+Route::get('/room/join/{roomName}/{userName}', 'RoomController@join');
 
+Route::get('/room/createGroup/{userName}', 'RoomController@createPublicChat');
 
+Route::get('/room/{userName}/{otherName}', 'RoomController@openPrivateChat');
 
-Route::get('/allUsers/{thisUserId}', 'RoomController@showAllUsers');
-
-Route::get('/startPrivateConversation', 'AllUsersController@startPrivateConversation');
-
-Route::get('/notify', 'PusherController@sendNotification');
+Route::post('/room/public', 'RoomController@openPublicChat');

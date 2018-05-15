@@ -18,7 +18,7 @@
 
   <body class="text-center">
     <form class="form-signin" action="{{ url('/users/store') }}" method="post" >
-      <h1 class="h3 mb-3 font-weight-normal">Registrate wacho!</h1>
+      <h1 class="h3 mb-3 font-weight-normal">Registrate</h1>
 
       <div class="bg-warning">
         <div class="text-danger">

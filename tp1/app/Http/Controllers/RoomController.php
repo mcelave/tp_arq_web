@@ -13,14 +13,13 @@ class RoomController extends Controller {
         $room = Room::mainRoom();
         $user = User::named($request['name']);
         $channelName = "room_channel_".$room->id;
-
         $room->host($user);
         return view('room', compact('room', 'user', 'channelName'));
     }
 
     public function sendMessage(Request $request) {
         $pusher = App::make('pusher');
-        $pusher->trigger($request['channelName'], 'client-notify-message',
+        $pusher->trigger($request['channelName'], env('PUSHER_MESSAGE_EVENT'),
             array('message' => $request['message'], 'user' => $request['user']));
     }
 
@@ -40,42 +39,69 @@ class RoomController extends Controller {
         fwrite($ifp, base64_decode($data[1]));
         fclose($ifp);
 
-        $pusher->trigger($channelName, 'client-notify-image',
+        $pusher->trigger($channelName, env('PUSHER_IMAGE_EVENT'),
             array('image' => $uniqueIDAndExtension, 'user' => $user));
     }
 
-    public function showAllUsers($thisUserId) {
-        $thisUser = User::find($thisUserId);
-        return view('allUsers',['users' => User::allUsers(), 'thisUser' => $thisUser]);
-    }
-
     public static function openPrivateChat($firstUser, $secondUser) {
-        $private = function ($room) { 
-            return $room['private'];
-        };
+        $currentUser = User::named($firstUser);
+        $otherUser = User::named($secondUser);
 
-        $firstUserPrivateRooms = $firstUser-> rooms()-> get()-> filter($private);
+        $private = function ($room) {
+            return $room['private'];};
 
+        $firstUserPrivateRooms = $currentUser->rooms()->get()->filter($private);
         foreach ($firstUserPrivateRooms as $privateRoom) {
-            if ($privateRoom-> users()-> get()-> contains('id', $secondUser->id)) {
+            if ($privateRoom->users()->get()->contains('id', $otherUser->id)) {
                 return view('room', [
                     'room' => $privateRoom,
-                    'user' => $firstUser,
+                    'user' => $currentUser,
                     'channelName' => "room_channel_".$privateRoom->id
                 ]);
             }
         }
-    
-        return RoomController::create($firstUser, [$firstUser, $secondUser], true, 'Sala Privada');
+        return RoomController::create($currentUser, collect([$currentUser, $otherUser]), true, 'Sala Privada');
+    }
+
+    public static function openPublicChat(Request $request) {
+        $user = User::named($request['user']);
+        $members = collect($request['members'])->map(function ($memberName, $key) {
+            return User::named($memberName);});
+        return RoomController::create($user, $members, false, $request['name']);
     }
 
     private static function create($user, $members, $private, $roomName) {
         $room = Room::definedBy($roomName, $members, $private);
-
         return view('room', [
             'room'=> $room,
             'user' => $user,
             'channelName' => "room_channel_".$room->id
+        ]);
+    }
+
+    public function showAll($userName) {
+        $user = User::named($userName);
+        $rooms = Room::where(['private' => false])->get();
+        return view('allGroups', compact('rooms', 'user'));
+    }
+
+    public function join($roomName, $userName) {
+        $user = User::named($userName);
+        $room = Room::named($roomName);
+        $room->host($user);
+        return view('room', [
+            'room'=> $room,
+            'user' => $user,
+            'channelName' => "room_channel_".$room->id
+        ]);
+    }
+
+    public function createPublicChat($userName) {
+        $currentUser = User::named($userName);
+        $users = User::all();
+        return view('createPublicRoom', [
+            'user' => $currentUser,
+            'users' => $users
         ]);
     }
 }

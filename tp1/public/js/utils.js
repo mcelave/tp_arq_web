@@ -14,45 +14,41 @@ function suscribeToChannel(channelName, pusher, userName, messageEvent, imageEve
     var control;
 
     channel.bind(messageEvent, function (data) {
-    if (userName == data.user){
+        var classDescription;
+
+        if (userName == data.user) {
+            classDescription = "msj-response bubble";
+        } else {
+            classDescription = "msj bubble";
+        }
+
         control = '<li style="width:100%">' +
-            '<div class="msj-response bubble">' +
+            "<div class='"+classDescription+"'>" +
                 '<div class="text text-l">' +
                     '<p class="messageBody">'+ data.message +'</p>' +
-                    '<p class="messageUser"><small>'+data.user+'</small></p>' +
+                    "<p class='messageUser'><a href='/room/"+userName+"/"+data.user+"' target='_blank'><small>"+data.user+"</small></a></p>" +
                 '</div>' +
             '</div>' +
-        '</li>';  
-    } else {
-        control = '<li style="width:100%">' +
-            '<div class="msj bubble">' +
-                '<div class="text text-l">' +
-                    '<p class="messageBody">'+ data.message +'</p>' +
-                    '<p class="messageUser"><small>'+data.user+'</small></p>' +
-                '</div>' +
-            '</div>' +
-        '</li>';  
-    }
+        '</li>';
     $("ul").append(control).scrollTop($("ul").prop('scrollHeight')); 
   });
 
    channel.bind(imageEvent, function (data) {
-       var image = "img/" + data.image;
+       var image = "/img/" + data.image;
+       var classDescription;
+
        if (userName == data.user) {
-           control = '<li style="width:100%">' +
-               '<div class="msj-response bubble">' +
-               "<div class=\"text text-l\"><a href='" +image  + "' target=\"_blank\"><img src='" +image  + "' style='width:128px;height:128px;'></a></br>" +
-               '<p class="messageUser"><small>'+data.user+'</small></p></div>' +
-               '</div>' +
-               '</li>';
+           classDescription = "msj-response bubble";
        } else {
-           control = '<li style="width:100%">' +
-               '<div class="msj bubble">' +
-               "<div class=\"text text-l\"><a href='" + image + "' target=\"_blank\"><img src='" + image + "' style='width:128px;height:128px;'></a></br>" +
-               '<p class="messageUser"><small>' +data.user+ '</small></p></div>' +
-               '</div>' +
-               '</li>';
+           classDescription = "msj bubble";
        }
+
+       control = '<li style="width:100%">' +
+           "<div class='"+classDescription+"'>" +
+           "<div class=\"text text-l\"><a href='" + image + "' target=\"_blank\"><img src='" + image + "' style='width:128px;height:128px;'></a></br>" +
+           "<p class='messageUser'><a href='/room/"+userName+"/"+data.user+"' target='_blank'><small>"+data.user+"</small></a></p></div>" +
+           '</div>' +
+           '</li>';
        $("ul").append(control).scrollTop($("ul").prop('scrollHeight'));
    });
 }
@@ -96,8 +92,3 @@ function sendImageRequest(user, image, extension, channelName) {
         url: location.origin + "/room/sendImage",
         type: 'POST',
         data: {user: user, image: image, extension: extension, channelName: channelName},});}
-
-
-function setLinkToAllUsers(user) {
-    $(linkToAllUsers).append("<a href=" + location.origin + "/allUsers/" + user.id +">Lista de usuarios</a>")
-}

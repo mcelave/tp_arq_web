@@ -10,6 +10,12 @@ class UserByRoom extends Model {
     protected $fillable = ['user_id', 'room_id'];
 
     public static function defineRelationship($user, $room) {
-        $room->users()->save($user);
+        if (UserByRoom::notHosting($room, $user)) {
+            $room->users()->save($user);
+        }
+    }
+
+    public static function notHosting($room, $user) {
+        UserByRoom::where(['user_id' => $user->id, 'room_id' => $room->id])->get()->isEmpty();
     }
 }

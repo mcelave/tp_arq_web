@@ -25,10 +25,16 @@ class UserController extends Controller {
         return redirect()->action('RoomController@mainRoom', ['name' => $request['name']]);
     }
 
-    public function show($id) {
-        //
+    public function show($userName) {
+        $user = User::named($userName);
+        return view('showUser', compact('user'));
     }
 
+    public function showAll($userName) {
+        $currentUser = User::named($userName);
+        $users = User::all();
+        return view('allUsers', compact('users', 'currentUser'));
+    }
 
     public function destroy($id) {
         //

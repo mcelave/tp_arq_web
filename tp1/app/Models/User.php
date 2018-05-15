@@ -17,10 +17,6 @@ class User extends Model {
 		return User::where(['name'=> $name])->first();
 	}
 
-	public static function allUsers() {
-		return User::all();
-	}
-
 	public function rooms() {
 		return $this->belongsToMany('App\Models\Room');
 	}

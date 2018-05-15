@@ -13,17 +13,16 @@ class Room extends Model {
 	public static function definedBy($name, $users, $private) {
 		$room = Room::create(['name'=> $name, 'private'=> $private]);
 
-		// If a user is repeated, we filter them out
-		// this is to avoid having someone start a chat with himself
-		// and creating the same entry two times in the room_user table
-		$unique_users = array_unique($users);
-
+		$unique_users = $users->unique();
 		foreach ($unique_users as $user) {
-			$room->users()->save($user);
+			$room->host($user);
 		}
-
 		return $room;
 	}
+
+    public static function named($name) {
+        return Room::where(['name'=> $name])->first();
+    }
 
 	public static function createMainRoom() {
 		Room::create(['name' => self::MAIN_ROOM_NAME, 'private'=> false]);
