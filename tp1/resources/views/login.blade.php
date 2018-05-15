@@ -34,7 +34,7 @@
       <input type="text" id="nameText" name="name" class="form-control" placeholder="Nombre" required autofocus>
 
       <label for="inputAge" class="sr-only">Edad</label>
-      <input type="text" id="ageText"  name="age" class="form-control" placeholder="Edad" required>
+      <input type="number" id="ageText"  name="age" class="form-control" placeholder="Edad" required>
      
       <label for="inputCity" class="sr-only">Ciudad</label>
       <input type="text" id="cityText" name="city" class="form-control" placeholder="Ciudad" required>

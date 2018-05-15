@@ -15,58 +15,41 @@
         <link href="css/room.css" rel="stylesheet">
 
         <script>
-    let currentUser = <?php echo json_encode($user); ?>;
-    let channelName = <?php echo json_encode($channelName); ?>;
+            var currentUser = <?php echo json_encode($user); ?>;
+            var channelName = <?php echo json_encode($channelName); ?>;
+            var pusher = newPusher(<?php echo json_encode(env('PUSHER_APP_KEY')); ?>);
+            var messageEvent = <?php echo json_encode(env('PUSHER_MESSAGE_EVENT')); ?>;
+            var imageEvent = <?php echo json_encode(env('PUSHER_IMAGE_EVENT')); ?>;
 
-    var pusher = newPusher();
+            $( document ).ready(function() {
+                ajaxSetup();
+                suscribeToChannel(channelName, pusher, currentUser.name, messageEvent, imageEvent);
+                sendingMessageTriggers();
+                setLinkToAllUsers(currentUser);
+            });
+        </script>
+        <title>{{ $room-> name }}</title>
+    </head>
+    <body>
+        <h4>Bienvenido {{$user -> name}} a {{$room-> name}}</h4>
+        <h6 id="linkToAllUsers"></h6>
 
-    $( document ).ready(function() {
-        ajaxSetup();
-
-        suscribeToChannel(channelName, pusher, currentUser.name);
-
-        $(".mytext").on("keydown", function(e){
-            if (e.which == 13){
-                var text = $(this).val();
-                if (text !== "") {
-                  sendMessage(currentUser.name, text, channelName);
-                  $(this).val('');
-                }
-            }
-        });
-
-      $('body > div > div > div:nth-child(2) > span').click(function(){
-           $(".mytext").trigger({type: 'keydown', which: 13, keyCode: 13}); 
-      });
-
-        setLinkToAllUsers(currentUser);
-    });
-
-    </script>
-    <title>{{$room-> name}}</title>
-
-</head>
-<body>
-    <h1>{{$room-> name}}</h1>
-    <h4>Bienvenido {{$user -> name}}</h4>
-    <h6 id="linkToAllUsers"></h6>
-
-    <div class="col-sm-3 col-sm-offset-4 frame">
-        <ul></ul>
-        <div>
-            <div class="msj-rta macro">
-                <div class="text text-r" style="background:whitesmoke !important">
-                    <input class="mytext" placeholder="Escriba un mensaje"/>
+        <div class="col-sm-12 frame">
+            <ul></ul>
+            <div>
+                <div class="msj-response macro">
+                    <div class="text text-r" style="background:whitesmoke !important">
+                        <input class="message" placeholder="Escriba un mensaje"/>
+                    </div>
+                </div>
+                <div style="padding:10px;">
+                    <span id="sendMsg" class="glyphicon glyphicon-share-alt"></span>
+                </div>
+                <div style="padding:10px;">
+                    <input id="image" name="image" type="file" class="inputfile" onchange="onChangeImageButton(event, currentUser, channelName)">
+                    <label for="image" class="glyphicon glyphicon-camera"></label>
                 </div>
             </div>
-            <div style="padding:10px;">
-                <span class="glyphicon glyphicon-share-alt"></span>
-            </div>
-            <div style="padding:10px;">
-                <input id="image" name="image" type="file" class="inputfile" onchange="onChange(event, currentUser, channelName)"></input>
-                <label for="image" class="glyphicon glyphicon-camera"></label>
-            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
