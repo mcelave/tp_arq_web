@@ -17,8 +17,8 @@
     <div class="col-sm-12 frame">
         <ul>
             @forelse ($users as $user)
-                <li><a href="/users/{{ $user->name }}?currentUser={{ $currentUser->name }}">{{ $user->name }}</a> -
-                    <a href="/room/{{ $currentUser->name }}/{{ $user->name }}">Privado</a></li>
+                <li><a  href="/users/{{ $user->name }}?currentUser={{ $currentUser->name }}">{{ $user->name }}</a> -
+                    <a  id="{{ $user->name }}" href="/room/{{ $currentUser->name }}/{{ $user->name }}">Privado</a></li>
             @empty
                 <li>No hay usuarios en línea.</li>
             @endforelse

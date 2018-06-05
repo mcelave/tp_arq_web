@@ -17,7 +17,7 @@
   </head>
 
   <body class="text-center">
-    <form class="form-signin" action="{{ url('/users/store') }}" method="post" >
+    <form class="form-signin" action="{{ url('/users/store') }}" id="formLogin" method="post" >
       <h1 class="h3 mb-3 font-weight-normal">Registrate</h1>
 
       <div class="bg-warning">
@@ -40,7 +40,7 @@
       <input type="text" id="cityText" name="city" class="form-control" placeholder="Ciudad" required>
      
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
-      <button class="btn btn-lg btn-primary btn-block" type="submit" >Entrar</button>
+      <button class="btn btn-lg btn-primary btn-block" id="entrar" type="submit" >Entrar</button>
     </form>
   </body>
 </html>

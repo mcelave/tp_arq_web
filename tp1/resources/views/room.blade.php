@@ -14,7 +14,7 @@
         <div>
             <div class="msj-response macro">
                 <div class="text text-r" style="background:whitesmoke !important">
-                    <input class="message" placeholder="Escriba un mensaje"/>
+                    <input id="message" class="message" placeholder="Escriba un mensaje"/>
                 </div>
             </div>
             <div style="padding:10px;">

@@ -26,7 +26,7 @@
         @yield('headerMessage')
     </div>
     <div class="col-sm-1">
-        <a class="navbar-brand" target="_blank" href="/users/all/{{ $user->name }}">Usuarios</a>
+        <a  id="usuarios" class="navbar-brand" target="_blank" href="/users/all/{{ $user->name }}">Usuarios</a>
     </div>
     <div class="col-sm-1">
         <a class="navbar-brand" target="_blank" href="/room/all/{{ $user->name }}">Grupos</a>
